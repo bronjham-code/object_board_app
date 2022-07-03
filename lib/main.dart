@@ -4,9 +4,7 @@ import 'package:object_board_app/core/const/general_const.dart';
 import 'package:object_board_app/core/router/route_map.dart';
 import 'package:object_board_app/core/router/router_redirect.dart';
 import 'package:object_board_app/core/theme/app_theme.dart';
-import 'package:object_board_app/profile/domain/states/authentication_global_state.dart';
-import 'package:object_board_app/splash/domain/states/splash_global_state.dart';
-import 'package:provider/provider.dart';
+import 'package:object_board_app/core/widgets/application_manager.dart';
 
 void main() {
   runApp(Application());
@@ -18,8 +16,7 @@ class Application extends StatelessWidget {
   late final _routeMap = RouteMap();
 
   late final _routeRedirect = RouterRedirect(
-    splashGlobalState: _splashGlobalState,
-    authenticationGlobalState: _authenticationGlobalState,
+    applicationManagerKey: _applicationManagerKey,
     routesWithAuthentication: _routeMap.routesWithAuthentication,
   );
 
@@ -31,23 +28,20 @@ class Application extends StatelessWidget {
     navigatorBuilder: _routeMap.navigatorBuilder,
   );
 
-  final _splashGlobalState = SplashGlobalState();
-  final _authenticationGlobalState = AuthenticationGlobalState();
+  final _applicationManagerKey = GlobalKey<ApplicationManagerState>();
 
   @override
-  Widget build(BuildContext context) => MultiProvider(
-        providers: [
-          Provider(create: (_) => _splashGlobalState),
-          Provider(create: (_) => _authenticationGlobalState),
-        ],
-        child: MaterialApp.router(
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          themeMode: ThemeMode.system,
-          title: GeneralConst.applicationTitle,
-          routerDelegate: _router.routerDelegate,
-          routeInformationParser: _router.routeInformationParser,
-          routeInformationProvider: _router.routeInformationProvider,
+  Widget build(BuildContext context) => MaterialApp.router(
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: ThemeMode.system,
+        title: GeneralConst.applicationTitle,
+        routerDelegate: _router.routerDelegate,
+        routeInformationParser: _router.routeInformationParser,
+        routeInformationProvider: _router.routeInformationProvider,
+        builder: (_, child) => ApplicationManager(
+          key: _applicationManagerKey,
+          child: child,
         ),
       );
 }

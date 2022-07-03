@@ -23,14 +23,18 @@ class SignInView extends StatefulWidget {
 class _SignInViewState extends State<SignInView> {
   late final AuthenticationGlobalState _authenticationGlobalState;
 
-  void _onSuccess() {
-    _authenticationGlobalState.signIn();
-    GoRouter.of(context).goUri(widget.target);
+  Future<void> _onSuccess() async {
+    await _authenticationGlobalState.signIn();
+    if (mounted) {
+      GoRouter.of(context).goUri(widget.target);
+    }
   }
 
-  void _onFailed() {
-    _authenticationGlobalState.signOut();
-    GoRouter.of(context).goUri(widget.source);
+  Future<void> _onFailed() async {
+    await _authenticationGlobalState.signOut();
+    if (mounted) {
+      GoRouter.of(context).goUri(widget.source);
+    }
   }
 
   @override

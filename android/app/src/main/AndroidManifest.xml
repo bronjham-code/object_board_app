@@ -3,7 +3,7 @@
    <application
         android:label="object_board_app"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:theme="@style/LaunchTheme">
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -1,8 +1,9 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:object_board_app/core/client/client_utils.dart';
 import 'package:object_board_app/core/repository/repository_utils.dart';
 import 'package:object_board_app/core/state/state_utils.dart';
-import 'package:object_board_app/core/storage/setup_storage.dart';
+import 'package:object_board_app/core/storage/storage_utils.dart';
+import 'package:object_board_app/onboarding/domain/states/onboarding_global_state.dart';
 import 'package:object_board_app/profile/domain/states/authentication_global_state.dart';
 import 'package:provider/provider.dart';
 
@@ -12,7 +13,7 @@ class ApplicationManager extends StatefulWidget {
     required this.child,
   });
 
-  final Widget? child;
+  final Widget child;
 
   @override
   State<ApplicationManager> createState() => ApplicationManagerState();
@@ -23,10 +24,9 @@ class ApplicationManagerState extends State<ApplicationManager> {
 
   final List<dynamic> _globalStates = [];
 
-  T? getGlobalState<T>() => _globalStates.firstWhereOrNull((state) => state is T);
-
   Future<void> _setupApplication() async {
     await StorageUtils.setupStorage();
+    await ClientUtils.setupClients();
     await RepositoryUtils.setupRepositories();
     await _createStates();
     await Future.delayed(const Duration(seconds: 3));
@@ -49,6 +49,7 @@ class ApplicationManagerState extends State<ApplicationManager> {
   @override
   void initState() {
     _setupApplication();
+
     super.initState();
   }
 
@@ -64,6 +65,7 @@ class ApplicationManagerState extends State<ApplicationManager> {
     return MultiProvider(
       providers: [
         _createProvider<AuthenticationGlobalState>(),
+        _createProvider<OnboardingGlobalState>(),
       ],
       child: widget.child,
     );

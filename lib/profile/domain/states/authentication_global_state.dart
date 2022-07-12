@@ -3,7 +3,7 @@ import 'package:object_board_app/profile/domain/repositories/authentication_repo
 import 'package:simple_state/simple_state.dart';
 
 class AuthenticationGlobalState {
-  AuthenticationGlobalState(this.authenticationRepository);
+  AuthenticationGlobalState({required this.authenticationRepository});
 
   @protected
   final AuthenticationRepository authenticationRepository;

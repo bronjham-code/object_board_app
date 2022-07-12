@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:object_board_app/onboarding/domain/states/onboarding_global_state.dart';
 import 'package:object_board_app/profile/domain/states/authentication_global_state.dart';
 
 class StateUtils {
@@ -6,7 +7,8 @@ class StateUtils {
     final getIt = GetIt.instance;
 
     return [
-      AuthenticationGlobalState(getIt.get()),
+      AuthenticationGlobalState(authenticationRepository: getIt.get()),
+      OnboardingGlobalState(onboardingRepository: getIt.get()),
     ];
   }
 }

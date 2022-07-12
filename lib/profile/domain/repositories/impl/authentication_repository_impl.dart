@@ -3,7 +3,7 @@ import 'package:object_board_app/profile/data/storage/token_storage.dart';
 import 'package:object_board_app/profile/domain/repositories/authentication_repository.dart';
 
 class AuthenticationRepositoryImpl implements AuthenticationRepository {
-  AuthenticationRepositoryImpl(this.tokenStorage);
+  AuthenticationRepositoryImpl({required this.tokenStorage});
 
   @protected
   final TokenStorage tokenStorage;

@@ -1,37 +1,23 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:object_board_app/core/router/route_map.dart';
-import 'package:object_board_app/core/widgets/application_manager.dart';
 import 'package:object_board_app/profile/domain/states/authentication_global_state.dart';
+import 'package:provider/provider.dart';
 
 class RouterRedirect {
   RouterRedirect({
-    required this.applicationManagerKey,
     required this.routesWithAuthentication,
   });
 
   @protected
   final List<Uri> routesWithAuthentication;
 
-  @protected
-  GlobalKey<ApplicationManagerState> applicationManagerKey;
+  String? generalRedirect(GoRouterState state, BuildContext context) => _authenticationRedirect(state, context);
 
-  String? generalRedirect(GoRouterState state) {
-    // final location = Uri.parse(state.location).path;
-    // final splashUri = RouteMap.buildSplashLocation();
-    // if (location != splashUri.path && !applicationGlobalState.isInitialized.value) {
-    //   return RouteMap.buildSplashLocation(target: Uri.parse(location)).toString();
-    // } else if (location == splashUri.path) {
-    //   return null;
-    // }
-
-    return _authenticationRedirect(state);
-  }
-
-  String? _authenticationRedirect(GoRouterState state) {
+  String? _authenticationRedirect(GoRouterState state, BuildContext context) {
     final location = Uri.parse(state.location);
     final isAuthRequired = routesWithAuthentication.any((e) => _isRouteEquals(e, location));
-    final authenticationGlobalState = applicationManagerKey.currentState!.getGlobalState<AuthenticationGlobalState>()!;
+    final authenticationGlobalState = Provider.of<AuthenticationGlobalState>(context, listen: false);
 
     if (isAuthRequired && !authenticationGlobalState.isAuthenticated.value) {
       return RouteMap.buildSignInLocation(
